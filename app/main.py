@@ -1,16 +1,21 @@
-from typing import Union
-
+from fastapi.responses import RedirectResponse
 from fastapi import FastAPI
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    print("hejsa")
-    return {"Hello": "World"}
+@app.get("/", include_in_schema=False)
+async def docs_redirect():
+    return RedirectResponse(url="/docs")
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/predict")
+def predict(header: str, context: str):
+    # TODO: Get prediction from a model
+    return {"result": "50% sure there's something here 🤷"}
+
+
+@app.post("/train")
+def train(header: str, context: str, handling: str):
+    # TODO: Send inputs to a model
+    return {"result": "The model has been improved and is better than ever! 🦄"}
